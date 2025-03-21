@@ -1,0 +1,32 @@
+apiVersion: skaffold/v4beta12
+kind: Config
+metadata:
+  name: chromium-operator
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+    - image: chromium-operator/chromium-operator
+      docker:
+        dockerfile: chromium-operator/Dockerfile
+    - image: chromium-operator/chromium
+      docker:
+        dockerfile: chromium/Dockerfile
+  local:
+    push: false
+    useBuildkit: true
+deploy:
+  kubeContext: kind-chromium-operator
+  helm:
+    releases:
+      - name: chromium-operator
+        chartPath: charts/chromium-operator
+        namespace: chromium-operator-system
+        createNamespace: true
+        valuesFiles:
+          - charts/chromium-operator/values.yaml
+        setValueTemplates:
+          image.repository: "{{ .IMAGE_REPO_chromium_operator_chromium_operator }}"
+          image.tag: "{{ .IMAGE_TAG_chromium_operator_chromium_operator }}@{{ .IMAGE_DIGEST_chromium_operator_chromium_operator }}"
+          chromiumDefaultImageTag: "{{ .IMAGE_TAG_chromium_operator_chromium }}"
+        version: 0.1.0

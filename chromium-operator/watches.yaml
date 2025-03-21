@@ -1,0 +1,6 @@
+- group: chromium.chromium-operator.com
+  version: v1alpha1
+  kind: Chromium
+  chart: chromium
+  overrideValues:
+    image.tag: "${CHROMIUM_DEFAULT_IMAGE_TAG:-latest}"

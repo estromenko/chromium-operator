@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromium-operator
+  labels:
+    service: chromium-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: chromium-operator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: chromium-operator
+    spec:
+      serviceAccountName: chromium-operator
+      containers:
+        - name: chromium-operator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+            - name: CHROMIUM_DEFAULT_IMAGE_TAG
+              value: "{{ .Values.chromiumDefaultImageTag }}"

@@ -1,0 +1,6 @@
+image:
+  repository: chromium-operator/chromium
+  tag: latest
+
+proxy: ""
+vncEnabled: false

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}"
+  labels:
+    app: "{{ .Release.Name }}"
+spec:
+  containers:
+    - name: "{{ .Release.Name }}"
+      image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      securityContext:
+        readOnlyRootFilesystem: false
+        allowPrivilegeEscalation: false
+      env:
+        - name: PROXY
+          value: "{{ .Values.proxy }}"
+        - name: VNC_ENABLED
+          value: "{{ .Values.vncEnabled }}"
+      resources:
+        limits:
+          cpu: "200m"
+          memory: 1Gi
+      ports:
+        - containerPort: 9222
+      volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+  volumes:
+    - name: tmp
+      emptyDir:
+        medium: Memory
+        sizeLimit: 256Mi

@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: chromium-operator
+rules:
+  - apiGroups: ["", "chromium.chromium-operator.com", "apiextensions.k8s.io"]
+    resources: ["pods", "services", "secrets", "chromium", "chromium/status"]
+    verbs: ["*"]
